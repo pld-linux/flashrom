@@ -85,9 +85,8 @@ BIOS / EFI / coreboot / firmware z pliku.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sbindir}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
 install %{name} $RPM_BUILD_ROOT%{_sbindir}
-install -d $RPM_BUILD_ROOT%{_mandir}/man8
 install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 %clean
