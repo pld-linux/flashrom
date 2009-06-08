@@ -13,7 +13,6 @@ BuildRequires:	glibc-headers
 BuildRequires:	pciutils-devel
 BuildRequires:	rpm-build >= 4.3-0.20030610.21
 BuildRequires:	zlib-devel
-ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir		/sbin
