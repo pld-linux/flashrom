@@ -41,12 +41,12 @@ firmware images.
       X, and other Unix-like OSes.
 
 %description -l pl.UTF-8
-flashrom to narzędzie do identyfikacji, odczytu, zapisu, weryfikacji
-i kasowania układów flash. Jest często używany do programowania
-BIOS / EFI / coreboot / firmware z pliku.
-     - Obsługuje ponad 160 chipów flash, 75 chipsetów, 100 płyt
-       głównych i 10 urządzeń PCI, które mogą być wykorzystane jako
-       zewnętrzne programatory.
+flashrom to narzędzie do identyfikacji, odczytu, zapisu, weryfikacji i
+kasowania układów flash. Jest często używany do programowania BIOS /
+EFI / coreboot / firmware z pliku.
+     - Obsługuje ponad 160 chipów flash, 75 chipsetów, 100 płyt głównych i
+       10 urządzeń PCI, które mogą być wykorzystane jako zewnętrzne
+       programatory.
      - Wspiera układy flash równoległe, LPC, SPI i FWH o różnych
        obudowach/wyprowadzeniach (DIP32, PLCC32, DIP8, SO8/SOIC8, TSOP32,
        TSOP40 i inne)
@@ -58,22 +58,19 @@ BIOS / EFI / coreboot / firmware z pliku.
      - Nie ma potrzeby ponownego uruchamiania komputera. Zaprogramuj swój
        chip w uruchomionym systemie, zweryfikuj, bądź szczęśliwy. Nowy
        firmware będzie dostępny przy następnym bootowaniu.
-     - Crossflashing i hotflashing jest możliwe tak długo, jak układy
-       flash są elektrycznie i logicznie kompatybilne (ten sam protokół).
-       Świetna metoda do przywracania sprzętu z źle zaprogramowanym
-       firmware/BIOS.
+     - Crossflashing i hotflashing jest możliwe tak długo, jak układy flash
+       są elektrycznie i logicznie kompatybilne (ten sam protokół). Świetna
+       metoda do przywracania sprzętu z źle zaprogramowanym firmware/BIOS.
      - Możliwość tworzenia skryptów do wielokrotnego programowania.
        Programowanie identycznych maszyn w tym samym czasie z linii poleceń.
-       Zaleca się sprawdzanie komunikatów programu flashrom i kodów
-       błędów.
+       Zaleca się sprawdzanie komunikatów programu flashrom i kodów błędów.
      - Szybkość. flashrom jest często znacznie szybszy niż większość
-       sprzedawanych narzędzi dp flashowania.
-     - Wszechstronność. Wspiera Linux, FreeBSD, Dragonfly BSD, Solaris,
-       Mac OS X i inne systemy operacyjne oparte na Unix.
+       sprzedawanych narzędzi do flashowania.
+     - Wszechstronność. Wspiera Linux, FreeBSD, Dragonfly BSD, Solaris, Mac
+       OS X i inne systemy operacyjne oparte na Unix.
 
 %prep
 %setup -q
-%{__sed} -i -e 's,__LIB_DIR_,%{_libdir},g' Makefile
 
 %build
 %{__make} \
