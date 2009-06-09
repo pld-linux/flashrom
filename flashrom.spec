@@ -8,6 +8,7 @@ Group:		Applications/Communications
 Source0:	http://qa.coreboot.org/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	2211590202aead416eb649c9348b35b3
 URL:		http://www.coreboot.org/Flashrom
+BuildRequires:	pciutils-devel
 BuildRequires:	rpm-build >= 4.3-0.20030610.21
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
