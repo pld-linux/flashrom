@@ -1,5 +1,5 @@
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
-Summary(pl.UTF-8):	Narzędzie do upgrade BIOS z lini poleceń Unix/Linux
+Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS z lini poleceń Unix/Linux
 Name:		flashrom
 Version:	0.9.0
 Release:	1
@@ -52,7 +52,7 @@ BIOS / EFI / coreboot / firmware z pliku.
      - Nie potrzeba fizycznego dostępu, wystarczy dostęp do konta root.
      - Nie potrzebuje bootowalnej dyskietki, rozruchowego dysku CD-ROM lub
        innych nośników.
-     - Niekonieczne ani klawiatura lub monitor. Wystarczy przeprogramować
+     - Nie potrzebne są klawiatura czy monitor. Wystarczy przeprogramować
        zdalnie poprzez SSH.
      - Nie ma potrzeby ponownego uruchamiania komputera. Zaprogramuj swój
        chip w uruchomionym systemie, zweryfikuj, bądź szczęśliwy. Nowy
@@ -61,10 +61,10 @@ BIOS / EFI / coreboot / firmware z pliku.
        flash są elektrycznie i logicznie kompatybilne (ten sam protokół).
        Świetna metoda do przywracania sprzętu z źle zaprogramowanym
        firmware/BIOS.
-     - Prosta możliwość tworzenia skryptów do wielokrotnego
-       programowania. Programowanie identycznych maszyn w tym samym czasie z
-       linii poleceń. Zaleca się sprawdzanie komunikatów programu flashrom
-       i kodów błędów.
+     - Możliwość tworzenia skryptów do wielokrotnego programowania.
+       Programowanie identycznych maszyn w tym samym czasie z linii poleceń.
+       Zaleca się sprawdzanie komunikatów programu flashrom i kodów
+       błędów.
      - Szybkość. flashrom jest często znacznie szybszy niż większość
        sprzedawanych narzędzi dp flashowania.
      - Wszechstronność. Wspiera Linux, FreeBSD, Dragonfly BSD, Solaris,
