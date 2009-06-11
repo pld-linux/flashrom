@@ -4,7 +4,7 @@ Name:		flashrom
 Version:	0.9.0
 Release:	1
 License:	GPL v2
-Group:		Applications/Communications
+Group:		Applications/System
 Source0:	http://qa.coreboot.org/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	2211590202aead416eb649c9348b35b3
 URL:		http://www.coreboot.org/Flashrom
