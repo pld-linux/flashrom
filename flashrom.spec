@@ -1,12 +1,12 @@
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS z lini poleceń Unix/Linux
 Name:		flashrom
-Version:	0.9.1
+Version:	0.9.2
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://qa.coreboot.org/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	2b7cc0e45a0ac4c6d43c0f7cd05b041a
+# Source0-md5:	21751b4ea93c5a82c725adae7b63014a
 URL:		http://www.coreboot.org/Flashrom
 BuildRequires:	pciutils-devel
 BuildRequires:	zlib-devel
@@ -77,8 +77,8 @@ EFI / coreboot / firmware z pliku.
 %build
 %{__make} \
 	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags}' \
-	LDFLAGS='%{rpmldflags}'
+	CFLAGS="%{rpmcflags}" \
+	LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
