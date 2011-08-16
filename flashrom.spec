@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	ftdi	# FTDI chips
+#
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS-u z linii poleceń Uniksa/Linuksa
 Name:		flashrom
@@ -8,6 +12,7 @@ Group:		Applications/System
 Source0:	http://download.flashrom.org/releases/%{name}-%{version}.tar.bz2
 # Source0-md5:	d739a91aece12cc1e622038bb199541c
 URL:		http://www.flashrom.org/Flashrom
+%{?with_ftdi:BuildRequires:	libftdi-devel}
 BuildRequires:	pciutils-devel
 BuildRequires:	zlib-devel
 ExclusiveArch:	%{ix86} %{x8664} mips ppc ppc64
@@ -79,7 +84,8 @@ BIOS-u / EFI / coreboot / firmware'u.
 %{__make} \
 	CC='%{__cc}' \
 	CFLAGS="%{rpmcflags}" \
-	LDFLAGS="%{rpmldflags}"
+	LDFLAGS="%{rpmldflags}" \
+	%{!?with_ftdi:CONFIG_FT2232_SPI=no}
 
 %install
 rm -rf $RPM_BUILD_ROOT
