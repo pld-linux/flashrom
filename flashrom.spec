@@ -5,12 +5,12 @@
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS-u z linii poleceń Uniksa/Linuksa
 Name:		flashrom
-Version:	0.9.6.1
+Version:	0.9.7
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://download.flashrom.org/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	407e836c0a2b17ec76583cb6809f65e5
+# Source0-md5:	d239bafa1b46619d851f70f84a5b122a
 URL:		http://www.flashrom.org/Flashrom
 %{?with_ftdi:BuildRequires:	libftdi-devel}
 BuildRequires:	pciutils-devel
