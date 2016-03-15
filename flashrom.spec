@@ -19,7 +19,7 @@ BuildRequires:	libusb-devel >= 1.0
 BuildRequires:	pciutils-devel
 BuildRequires:	pkgconfig
 BuildRequires:	zlib-devel
-ExclusiveArch:	%{ix86} %{x8664} mips ppc ppc64 sparc sparcv9 sparc64
+ExclusiveArch:	%{ix86} %{x8664} x32 mips ppc ppc64 sparc sparcv9 sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir		/sbin
