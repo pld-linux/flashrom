@@ -1,0 +1,52 @@
+From 13a356815d2438103689a6ea1ac7e58d4d508ddb Mon Sep 17 00:00:00 2001
+From: Marc Schink <dev@zapb.de>
+Date: Tue, 8 Dec 2020 22:20:50 +0100
+Subject: [PATCH] meson: Add missing config option for J-Link SPI
+
+Signed-off-by: Marc Schink <dev@zapb.de>
+Change-Id: I476c649f9db7342688560aac9ee5df056517a028
+Reviewed-on: https://review.coreboot.org/c/flashrom/+/48478
+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
+Reviewed-by: Angel Pons <th3fanbus@gmail.com>
+Reviewed-by: Edward O'Callaghan <quasisec@chromium.org>
+---
+ meson.build       | 6 ++++++
+ meson_options.txt | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index fd5a5ef79..556183e5e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -38,6 +38,7 @@ config_ch341a_spi = get_option('config_ch341a_spi')
+ config_dediprog = get_option('config_dediprog')
+ config_developerbox_spi = get_option('config_developerbox_spi')
+ config_digilent_spi = get_option('config_digilent_spi')
++config_jlink_spi = get_option('config_jlink_spi')
+ config_drkaiser = get_option('config_drkaiser')
+ config_dummy = get_option('config_dummy')
+ config_ene_lpc = get_option('config_ene_lpc')
+@@ -159,6 +160,11 @@ if config_digilent_spi
+   srcs += 'digilent_spi.c'
+   cargs += '-DCONFIG_DIGILENT_SPI=1'
+ endif
++if config_jlink_spi
++  srcs += 'jlink_spi.c'
++  cargs += '-DCONFIG_JLINK_SPI=1'
++  deps += dependency('libjaylink')
++endif
+ if config_drkaiser
+   srcs += 'drkaiser.c'
+   cargs += '-DCONFIG_DRKAISER=1'
+diff --git a/meson_options.txt b/meson_options.txt
+index 9c0a7982e..89fcbee88 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -9,6 +9,7 @@ option('config_ch341a_spi', type : 'boolean', value : true, description : 'Winch
+ option('config_dediprog', type : 'boolean', value : true, description : 'Dediprog SF100')
+ option('config_developerbox_spi', type : 'boolean', value : true, description : 'Developerbox emergency recovery')
+ option('config_digilent_spi', type : 'boolean', value : true, description : 'Digilent Development board JTAG')
++option('config_jlink_spi', type : 'boolean', value : false, description : 'SEGGER J-Link and compatible devices')
+ option('config_drkaiser', type : 'boolean', value : true, description : 'Dr. Kaiser')
+ option('config_dummy', type : 'boolean', value : true, description : 'dummy tracing')
+ option('config_ene_lpc', type : 'boolean', value : true, description : 'ENE LPC interface keyboard controller')

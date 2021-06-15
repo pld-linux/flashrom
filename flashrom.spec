@@ -1,5 +1,6 @@
 #
 # Conditional build:
+%bcond_without	apidocs	# API documentation
 %bcond_without	ftdi	# FTDI chips
 %bcond_without	jaylink	# J-Link chips
 #
@@ -12,17 +13,21 @@ License:	GPL v2+
 Group:		Applications/System
 Source0:	https://download.flashrom.org/releases/%{name}-v%{version}.tar.bz2
 # Source0-md5:	7f8e4b87087eb12ecee0fcc5445b4956
+Patch0:		%{name}-meson-jlink.patch
 URL:		https://www.flashrom.org/Flashrom
+%{?with_apidocs:BuildRequires:	doxygen}
 %{?with_ftdi:BuildRequires:	libftdi1-devel >= 1.0}
 %{?with_jaylink:BuildRequires:	libjaylink-devel}
 BuildRequires:	libusb-devel >= 1.0
+BuildRequires:	meson >= 0.47.0
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pciutils-devel
+BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	pkgconfig
 BuildRequires:	zlib-devel
 ExclusiveArch:	%{ix86} %{x8664} x32 mips ppc ppc64 sparc sparcv9 sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		_sbindir		/sbin
 
 %description
 flashrom is a utility for identifying, reading, writing, verifying and
@@ -84,28 +89,96 @@ BIOS-u / EFI / coreboot / firmware'u.
    Debian/kFreeBSD), Dragonfly BSD, Solaris, Mac OS X oraz inne
    systemy operacyjne oparte na Uniksie, a także GNU Hurd.
 
+%package -n libflashrom
+Summary:	Flash ROM programming library
+Summary(pl.UTF-8):	Biblioteka do programowania pamięci Flash ROM
+Group:		Libraries
+
+%description -n libflashrom
+Flash ROM programming library.
+
+%description -n libflashrom -l pl.UTF-8
+Biblioteka do programowania pamięci Flash ROM.
+
+%package -n libflashrom-devel
+Summary:	Header files for libflashrom library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libflashrom
+Group:		Development/Libraries
+Requires:	libflashrom = %{version}-%{release}
+
+%description -n libflashrom-devel
+Header files for libflashrom library.
+
+%description -n libflashrom-devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki libflashrom.
+
+%package -n libflashrom-apidocs
+Summary:	API documentation for libflashrom library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki libflashrom
+Group:		Documentation
+BuildArch:	noarch
+
+%description -n libflashrom-apidocs
+API documentation for libflashrom library.
+
+%description -n libflashrom-apidocs -l pl.UTF-8
+Dokumentacja API biblioteki libflashrom.
+
 %prep
 %setup -q -n %{name}-v%{version}
+%patch0 -p1
 
 %build
-%{__make} \
-	CC='%{__cc}' \
-	CFLAGS="%{rpmcflags}" \
-	LDFLAGS="%{rpmldflags}" \
-	%{!?with_ftdi:CONFIG_FT2232_SPI=no} \
-	%{?with_jaylink:CONFIG_JLINK_SPI=yes}
+%meson build \
+	-Dconfig_atahpt=true \
+	-Dconfig_atapromise=true \
+	%{!?with_ftdi:-Dconfig_ft2232_spi=false} \
+	%{?with_jaylink:-Dconfig_jlink_spi=true} \
+	-Dconfig_mstarddc_spi=true \
+	-Dconfig_nicnatsemi=true \
+
+%ninja_build -C build
+
+# missing from meson
+%{__make} flashrom.8
+
+%if %{with apidocs}
+doxygen
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
-install %{name} $RPM_BUILD_ROOT%{_sbindir}
-install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
+install -d $RPM_BUILD_ROOT%{_mandir}/man8
+
+%ninja_install -C build
+
+cp -p flashrom.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-n libflashrom -p /sbin/ldconfig
+%postun	-n libflashrom -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%doc README
+%doc README Documentation/*.txt
 %attr(755,root,root) %{_sbindir}/flashrom
 %{_mandir}/man8/flashrom.8*
+
+%files -n libflashrom
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libflashrom.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libflashrom.so.1
+
+%files -n libflashrom-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libflashrom.so
+%{_includedir}/libflashrom.h
+%{_pkgconfigdir}/flashrom.pc
+
+%if %{with apidocs}
+%files -n libflashrom-apidocs
+%defattr(644,root,root,755)
+%doc libflashrom-doc/html/{search,*.css,*.html,*.js,*.png}
+%endif
