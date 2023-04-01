@@ -7,13 +7,12 @@
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS-u z linii poleceń Uniksa/Linuksa
 Name:		flashrom
-Version:	1.2
+Version:	1.3.0
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	https://download.flashrom.org/releases/%{name}-v%{version}.tar.bz2
-# Source0-md5:	7f8e4b87087eb12ecee0fcc5445b4956
-Patch0:		%{name}-meson-jlink.patch
+# Source0-md5:	dd2727f8fa05a4517689ca4f9d87e600
 URL:		https://www.flashrom.org/Flashrom
 %{?with_apidocs:BuildRequires:	doxygen}
 %{?with_ftdi:BuildRequires:	libftdi1-devel >= 1.0}
@@ -112,6 +111,18 @@ Header files for libflashrom library.
 %description -n libflashrom-devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki libflashrom.
 
+%package -n libflashrom-static
+Summary:	Static libflashrom library
+Summary(pl.UTF-8):	Statyczna biblioteka libflashrom
+Group:		Development/Libraries
+Requires:	libflashrom-devel = %{version}-%{release}
+
+%description -n libflashrom-static
+Static libflashrom library.
+
+%description -n libflashrom-static -l pl.UTF-8
+Statyczna biblioteka libflashrom.
+
 %package -n libflashrom-apidocs
 Summary:	API documentation for libflashrom library
 Summary(pl.UTF-8):	Dokumentacja API biblioteki libflashrom
@@ -126,21 +137,12 @@ Dokumentacja API biblioteki libflashrom.
 
 %prep
 %setup -q -n %{name}-v%{version}
-%patch0 -p1
 
 %build
 %meson build \
-	-Dconfig_atahpt=true \
-	-Dconfig_atapromise=true \
-	%{!?with_ftdi:-Dconfig_ft2232_spi=false} \
-	%{?with_jaylink:-Dconfig_jlink_spi=true} \
-	-Dconfig_mstarddc_spi=true \
-	-Dconfig_nicnatsemi=true \
+	-Dprogrammer=group_i2c,group_pci,group_serial,group_usb%{?with_ftdi:,group_ftdi}%{?with_jaylink:,group_jlink},internal,linux_mtd,linux_spi,rayer_spi
 
 %ninja_build -C build
-
-# missing from meson
-%{__make} flashrom.8
 
 %if %{with apidocs}
 doxygen
@@ -151,8 +153,6 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_mandir}/man8
 
 %ninja_install -C build
-
-cp -p flashrom.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -176,6 +176,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libflashrom.so
 %{_includedir}/libflashrom.h
 %{_pkgconfigdir}/flashrom.pc
+
+%files -n libflashrom-static
+%defattr(644,root,root,755)
+%{_libdir}/libflashrom.a
 
 %if %{with apidocs}
 %files -n libflashrom-apidocs
