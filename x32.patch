@@ -1,0 +1,14 @@
+--- flashrom-v1.3.0/udelay.c~	2019-06-23 23:39:48.000000000 +0200
++++ flashrom-v1.3.0/udelay.c	2023-04-07 19:58:35.239152653 +0200
+@@ -57,7 +57,11 @@
+ 	struct timespec res;
+ 	if (!clock_getres(clock_id, &res)) {
+ 		if (res.tv_sec == 0 && res.tv_nsec <= 100) {
++#if defined(__x86_64__) && defined(__ILP32__)
++			msg_pinfo("Using clock_gettime for delay loops (clk_id: %d, resolution: %lldns).\n",
++#else
+ 			msg_pinfo("Using clock_gettime for delay loops (clk_id: %d, resolution: %ldns).\n",
++#endif
+ 				  (int)clock_id, res.tv_nsec);
+ 			use_clock_gettime = true;
+ 			return 1;
