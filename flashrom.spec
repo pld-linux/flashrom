@@ -30,7 +30,7 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	pkgconfig
 BuildRequires:	zlib-devel
-ExclusiveArch:	%{ix86} %{x8664} x32 mips ppc ppc64 sparc sparcv9 sparc64
+ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 mips ppc ppc64 sparc sparcv9 sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
