@@ -3,6 +3,10 @@
 %bcond_without	apidocs	# API documentation
 %bcond_without	ftdi	# FTDI chips
 %bcond_without	jaylink	# J-Link chips
+
+%ifarch %{ix86} %{x8664} x32
+%define		with_port_io	1
+%endif
 #
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS-u z linii poleceń Uniksa/Linuksa
@@ -142,7 +146,7 @@ Dokumentacja API biblioteki libflashrom.
 
 %build
 %meson build \
-	-Dprogrammer=group_i2c,group_pci,group_serial,group_usb%{?with_ftdi:,group_ftdi}%{?with_jaylink:,group_jlink},internal,linux_mtd,linux_spi,rayer_spi
+	-Dprogrammer=group_i2c,group_pci,group_serial,group_usb%{?with_ftdi:,group_ftdi}%{?with_jaylink:,group_jlink},internal,linux_mtd,linux_spi%{?with_port_io:,rayer_spi}
 
 %ninja_build -C build
 
