@@ -23,7 +23,7 @@ URL:		https://www.flashrom.org/Flashrom
 %{?with_ftdi:BuildRequires:	libftdi1-devel >= 1.0}
 %{?with_jaylink:BuildRequires:	libjaylink-devel}
 BuildRequires:	libusb-devel >= 1.0
-BuildRequires:	meson >= 0.47.0
+BuildRequires:	meson >= 0.53.0
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pciutils-devel
 BuildRequires:	rpm-build >= 4.6
