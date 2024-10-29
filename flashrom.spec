@@ -11,24 +11,25 @@
 Summary:	Tool Flashing your BIOS from the Unix/Linux command line
 Summary(pl.UTF-8):	Narzędzie do aktualizacji BIOS-u z linii poleceń Uniksa/Linuksa
 Name:		flashrom
-Version:	1.3.0
-Release:	2
+Version:	1.4.0
+Release:	1
 License:	GPL v2+
 Group:		Applications/System
-Source0:	https://download.flashrom.org/releases/%{name}-v%{version}.tar.bz2
-# Source0-md5:	dd2727f8fa05a4517689ca4f9d87e600
-Patch0:		x32.patch
+Source0:	https://download.flashrom.org/releases/%{name}-v%{version}.tar.xz
+# Source0-md5:	f2f04bfca63dda5b89322810ef9c63af
 URL:		https://www.flashrom.org/Flashrom
 %{?with_apidocs:BuildRequires:	doxygen}
 %{?with_ftdi:BuildRequires:	libftdi1-devel >= 1.0}
-%{?with_jaylink:BuildRequires:	libjaylink-devel}
+%{?with_jaylink:BuildRequires:	libjaylink-devel >= 0.3.0}
 BuildRequires:	libusb-devel >= 1.0
-BuildRequires:	meson >= 0.53.0
+BuildRequires:	meson >= 0.56.0
 BuildRequires:	ninja >= 1.5
-BuildRequires:	pciutils-devel
+BuildRequires:	pciutils-devel >= 2.2.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	pkgconfig
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRequires:	zlib-devel
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 mips ppc ppc64 sparc sparcv9 sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -93,6 +94,18 @@ BIOS-u / EFI / coreboot / firmware'u.
    Debian/kFreeBSD), Dragonfly BSD, Solaris, Mac OS X oraz inne
    systemy operacyjne oparte na Uniksie, a także GNU Hurd.
 
+%package doc
+Summary:	FlashROM package documentation in HTML format
+Summary(pl.UTF-8):	Dokumentacja pakietu FlashROM w formacie HTML
+Group:		Documentation
+BuildArch:	noarch
+
+%description doc
+FlashROM package documentation in HTML format.
+
+%description doc -l pl.UTF-8
+Dokumentacja pakietu FlashROM w formacie HTML.
+
 %package -n libflashrom
 Summary:	Flash ROM programming library
 Summary(pl.UTF-8):	Biblioteka do programowania pamięci Flash ROM
@@ -142,7 +155,6 @@ Dokumentacja API biblioteki libflashrom.
 
 %prep
 %setup -q -n %{name}-v%{version}
-%patch0 -p1
 
 %build
 %meson build \
@@ -160,6 +172,8 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man8
 
 %ninja_install -C build
 
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/flashrom/html/{_sources,.buildinfo,*.inv}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -168,9 +182,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README Documentation/*.txt
+%doc MAINTAINERS README.rst
 %attr(755,root,root) %{_sbindir}/flashrom
+%{bash_compdir}/flashrom.bash
 %{_mandir}/man8/flashrom.8*
+
+%files doc
+%defattr(644,root,root,755)
+%{_docdir}/flashrom
 
 %files -n libflashrom
 %defattr(644,root,root,755)
